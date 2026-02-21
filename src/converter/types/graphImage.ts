@@ -1,13 +1,15 @@
-import { GraphConverter } from "../GraphConverter.js";
-import { FileId } from "@excalidraw/excalidraw/types/element/types.js";
-import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/types/data/transform.js";
-import { BinaryFiles } from "@excalidraw/excalidraw/types/types.js";
-import { nanoid } from "nanoid";
-import { GraphImage } from "../../interfaces.js";
+import { GraphConverter } from "../GraphConverter";
+import { generateId } from "../../types";
+import {
+  FileId,
+  ExcalidrawElementSkeleton,
+  BinaryFiles,
+} from "../../types/excalidraw";
+import { GraphImage } from "../../interfaces";
 
 export const GraphImageConverter = new GraphConverter<GraphImage>({
   converter: (graph) => {
-    const imageId = nanoid() as FileId;
+    const imageId = generateId() as FileId;
 
     const { width, height } = graph;
     const imageElement: ExcalidrawElementSkeleton = {

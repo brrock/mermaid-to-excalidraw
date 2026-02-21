@@ -1,14 +1,14 @@
-import { nanoid } from "nanoid";
+import { generateId } from "../../types";
 import {
   transformToExcalidrawArrowSkeleton,
   transformToExcalidrawContainerSkeleton,
   transformToExcalidrawLineSkeleton,
   transformToExcalidrawTextSkeleton,
-} from "../transformToExcalidrawSkeleton.js";
-import { GraphConverter } from "../GraphConverter.js";
+} from "../transformToExcalidrawSkeleton";
+import { GraphConverter } from "../GraphConverter";
 
-import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/types/data/transform.js";
-import type { Class } from "../../parser/class.js";
+import type { ExcalidrawElementSkeleton } from "../../types/excalidraw";
+import type { Class } from "../../parser/class";
 
 export const classToExcalidrawSkeletonConvertor = new GraphConverter({
   converter: (chart: Class) => {
@@ -64,7 +64,8 @@ export const classToExcalidrawSkeletonConvertor = new GraphConverter({
     });
 
     Object.values(chart.namespaces).forEach((namespace) => {
-      const classIds = Object.keys(namespace.classes);
+      const classMap = namespace.classes || {};
+      const classIds = Object.keys(classMap);
       const children = [...classIds];
       const chartElements = [...chart.lines, ...chart.arrows, ...chart.text];
       classIds.forEach((classId) => {
@@ -78,7 +79,7 @@ export const classToExcalidrawSkeletonConvertor = new GraphConverter({
       });
       const frame: ExcalidrawElementSkeleton = {
         type: "frame",
-        id: nanoid(),
+        id: generateId(),
         name: namespace.id,
         children,
       };

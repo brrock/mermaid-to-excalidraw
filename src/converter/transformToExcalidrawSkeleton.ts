@@ -1,5 +1,5 @@
-import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/types/data/transform.js";
-import { Arrow, Line, Node, Text } from "../elementSkeleton.js";
+import { ExcalidrawElementSkeleton } from "../types/excalidraw";
+import { Arrow, Line, Node, Text } from "../elementSkeleton";
 
 export const normalizeText = (text: string) => {
   return text.replace(/\\n/g, "\n");

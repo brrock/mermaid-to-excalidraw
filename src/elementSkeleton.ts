@@ -1,7 +1,10 @@
-import { ExcalidrawTextElement } from "@excalidraw/excalidraw/types/element/types.js";
-import { entityCodesToText } from "./utils.js";
-import { ValidLinearElement } from "@excalidraw/excalidraw/types/data/transform.js";
-import { DEFAULT_FONT_SIZE } from "./constants.js";
+import {
+  ExcalidrawTextElement,
+  StrokeStyle,
+  Arrowhead,
+} from "./types/excalidraw";
+import { entityCodesToText } from "./utils";
+import { DEFAULT_FONT_SIZE } from "./constants";
 
 export type Arrow = Omit<Line, "type" | "strokeStyle"> & {
   type: "arrow";
@@ -9,14 +12,14 @@ export type Arrow = Omit<Line, "type" | "strokeStyle"> & {
     text: string | null;
     fontSize?: number;
   };
-  strokeStyle?: ValidLinearElement["strokeStyle"] | null;
-  strokeWidth?: ValidLinearElement["strokeWidth"];
+  strokeStyle?: StrokeStyle | null;
+  strokeWidth?: number;
   points?: number[][];
   sequenceNumber?: Container;
-  startArrowhead?: ValidLinearElement["startArrowhead"];
-  endArrowhead?: ValidLinearElement["endArrowhead"];
-  start?: ValidLinearElement["start"];
-  end?: ValidLinearElement["end"];
+  startArrowhead?: Arrowhead | null;
+  endArrowhead?: Arrowhead | null;
+  start?: { id?: string; type?: string };
+  end?: { id?: string; type?: string };
 };
 
 export type Line = {
@@ -28,7 +31,7 @@ export type Line = {
   id?: string;
   strokeColor?: string | null;
   strokeWidth?: number | null;
-  strokeStyle?: ValidLinearElement["strokeStyle"] | null;
+  strokeStyle?: StrokeStyle | null;
   groupId?: string;
   metadata?: { [key: string]: any };
 };
@@ -74,9 +77,9 @@ export const createArrowSkeletonFromSVG = (
   arrowNode: SVGLineElement | SVGPathElement,
   opts?: {
     label?: string;
-    strokeStyle?: ValidLinearElement["strokeStyle"];
-    startArrowhead?: ValidLinearElement["startArrowhead"];
-    endArrowhead?: ValidLinearElement["endArrowhead"];
+    strokeStyle?: StrokeStyle;
+    startArrowhead?: Arrowhead | null;
+    endArrowhead?: Arrowhead | null;
   }
 ) => {
   const arrow = {} as Arrow;

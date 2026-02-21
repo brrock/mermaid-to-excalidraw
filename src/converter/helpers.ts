@@ -1,7 +1,8 @@
 import {
   Arrowhead,
   ExcalidrawTextElement,
-} from "@excalidraw/excalidraw/types/element/types.js";
+  Mutable,
+} from "../types/excalidraw.js";
 import {
   CONTAINER_STYLE_PROPERTY,
   LABEL_STYLE_PROPERTY,
@@ -9,8 +10,7 @@ import {
   Vertex,
 } from "../interfaces.js";
 import { ExcalidrawVertexElement } from "../types.js";
-import { Mutable } from "@excalidraw/excalidraw/types/utility-types.js";
-import { removeMarkdown } from "@excalidraw/markdown-to-text";
+import { removeMarkdown } from "../utils/markdown.js";
 import { Edge } from "../parser/flowchart.js";
 
 /**

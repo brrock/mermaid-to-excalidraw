@@ -1,7 +1,9 @@
-import { DEFAULT_FONT_SIZE } from "./constants.js";
-import { graphToExcalidraw } from "./graphToExcalidraw.js";
-import { parseMermaid } from "./parseMermaid.js";
-import { validateMermaid } from "./validateMermaid.js";
+import { DEFAULT_FONT_SIZE } from "./constants";
+import { expandSkeletons } from "./converter/skeletonToElement";
+import { graphToExcalidraw } from "./graphToExcalidraw";
+import { parseMermaid } from "./parseMermaid";
+import { ExcalidrawScene, MermaidToExcalidrawResult } from "./types/excalidraw";
+import { validateMermaid } from "./validateMermaid";
 
 export interface MermaidConfig {
   /**
@@ -61,4 +63,23 @@ const parseMermaidToExcalidraw = async (
   return excalidrawElements;
 };
 
-export { parseMermaidToExcalidraw, validateMermaid };
+const serializeToExcalidraw = (
+  result: MermaidToExcalidrawResult
+): ExcalidrawScene => {
+  return {
+    type: "excalidraw",
+    version: 2,
+    source: "https://excalidraw.com",
+    elements: expandSkeletons(result.elements),
+    appState: {
+      gridSize: 20,
+      gridStep: 5,
+      gridModeEnabled: false,
+      viewBackgroundColor: "#ffffff",
+      lockedMultiSelections: {},
+    },
+    files: result.files || {},
+  };
+};
+
+export { parseMermaidToExcalidraw, validateMermaid, serializeToExcalidraw };

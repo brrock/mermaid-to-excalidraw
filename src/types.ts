@@ -1,18 +1,16 @@
-import { ImportedDataState } from "@excalidraw/excalidraw/types/data/types.js";
 import {
-  ExcalidrawRectangleElement,
+  ExcalidrawRectElement,
   ExcalidrawDiamondElement,
   ExcalidrawEllipseElement,
-} from "@excalidraw/excalidraw/types/element/types.js";
-import { Mutable } from "@excalidraw/excalidraw/types/utility-types.js";
+} from "./types/excalidraw";
 
 export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;
 
-export type ExcalidrawElement = Mutable<
-  ArrayElement<ImportedDataState["elements"]>
->;
-
 export type ExcalidrawVertexElement =
-  | ExcalidrawRectangleElement
+  | ExcalidrawRectElement
   | ExcalidrawDiamondElement
   | ExcalidrawEllipseElement;
+
+export function generateId(): string {
+  return Math.random().toString(36).substring(2, 9);
+}

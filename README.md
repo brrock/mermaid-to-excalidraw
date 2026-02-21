@@ -1,100 +1,139 @@
-# mermaid-to-excalidraw
+# @brrock/excalidraw-mermaid
 
-Convert mermaid diagrams to excalidraw
+Convert Mermaid diagrams to Excalidraw elements.
 
-## Set up
+## Installation
 
-Install packages:
-
-```
-yarn
-```
-
-Start development playground:
-
-```
-yarn start
+```bash
+bun add @brrock/excalidraw-mermaid
+# or
+npm install @brrock/excalidraw-mermaid
 ```
 
-Build command:
+**Note:** `mermaid` is a peer dependency and must be installed separately.
 
-```
-yarn build
+```bash
+bun add mermaid
+# or
+npm install mermaid
 ```
 
-## Get started
+## Usage
+
+### Simple Example
 
 ```ts
-parseMermaidToExcalidraw(diagramDefinition: string, config?: MermaidConfig)
+import {
+  parseMermaidToExcalidraw,
+  serializeToExcalidraw,
+} from "@brrock/excalidraw-mermaid";
+
+const diagramDefinition = `
+  graph TD
+    A[Start] --> B[End]
+`;
+
+try {
+  // 1. Convert Mermaid to Excalidraw results (elements and binary files)
+  const result = await parseMermaidToExcalidraw(diagramDefinition);
+
+  // 2. (Optional) Serialize to the full .excalidraw file format
+  const fullScene = serializeToExcalidraw(result);
+
+  console.log(fullScene);
+} catch (e) {
+  // Handle parse/validation errors
+}
 ```
 
-The `diagramDefinition` is the mermaid diagram definition.
-and `config` is the mermaid config. You can use the `config` param when you want to pass some custom config to mermaid.
+## API
 
-Currently `mermaid-to-excalidraw` only supports the :point_down: config params
+### `parseMermaidToExcalidraw(definition, config?)`
+
+Converts a Mermaid diagram definition to Excalidraw results.
+
+**Parameters:**
+
+- `definition` (string): The Mermaid diagram definition.
+- `config` (MermaidConfig, optional): Configuration for the Mermaid parser.
+
+**Returns:**
+
+- `Promise<MermaidToExcalidrawResult>`: An object containing `elements` and `files`.
 
 ```ts
-{
-  /**
-   * Whether to start the diagram automatically when the page loads.
-   * @default false
-   */
+interface MermaidToExcalidrawResult {
+  elements: ExcalidrawElementSkeleton[];
+  files?: BinaryFiles;
+}
+```
+
+### `serializeToExcalidraw(result)`
+
+Wraps the conversion result into a full Excalidraw file structure. This function automatically expands intermediate skeletons into final Excalidraw elements (e.g., separating text labels from shapes and linking them via `containerId`), making the result ready to be saved as an `.excalidraw` file or imported directly.
+
+**Parameters:**
+
+- `result` (MermaidToExcalidrawResult): The output from `parseMermaidToExcalidraw`.
+
+**Returns:**
+
+- `ExcalidrawScene`: A complete Excalidraw scene object.
+
+```ts
+interface ExcalidrawScene {
+  type: "excalidraw";
+  version: 2;
+  source: string;
+  elements: ExcalidrawElement[]; // Final expanded elements
+  appState: {
+    gridSize: number;
+    viewBackgroundColor: string;
+    // ... other app state defaults
+  };
+  files: BinaryFiles;
+}
+```
+
+### `validateMermaid(mermaidStr)`
+
+Helper to validate Mermaid syntax before attempting conversion.
+
+**Parameters:**
+
+- `mermaidStr` (string): The Mermaid diagram definition.
+
+**Returns:**
+
+- `Promise<boolean>`: True if valid, throws or returns false otherwise (depending on mermaid version).
+
+## Configuration
+
+### `MermaidConfig`
+
+```ts
+interface MermaidConfig {
   startOnLoad?: boolean;
-  /**
-   * The flowchart curve style.
-   * @default "linear"
-   */
   flowchart?: {
     curve?: "linear" | "basis";
   };
-  /**
-   * Theme variables
-   * @default { fontSize: "20px" }
-   */
   themeVariables?: {
     fontSize?: string;
   };
-  /**
-   * Maximum number of edges to be rendered.
-   * @default 500
-   */
   maxEdges?: number;
-  /**
-   * Maximum number of characters to be rendered.
-   * @default 50000
-   */
   maxTextSize?: number;
 }
 ```
 
-Example code:
+### Supported Diagram Types
 
-```ts
-import { parseMermaidToExcalidraw } from "@excalidraw/mermaid-to-excalidraw";
+- Flowchart
+- Sequence
+- Class
 
-try {
-  const { elements, files } = await parseMermaidToExcalidraw(
-    diagramDefinition,
-    {
-      themeVariables: {
-        fontSize: "25px",
-      },
-    }
-  );
-  // Render elements and files on Excalidraw
-} catch (e) {
-  // Parse error, displaying error message to users
-}
+## Building
+
+```bash
+bun install
+bun run build
 ```
-
-## Playground
-
-Try out [here](https://mermaid-to-excalidraw.vercel.app).
-
-## API
-
-Head over to the [docs](https://docs.excalidraw.com/docs/@excalidraw/mermaid-to-excalidraw/api).
-
-## Support new Diagram type
-
-Head over to the [docs](https://docs.excalidraw.com/docs/@excalidraw/mermaid-to-excalidraw/codebase/new-diagram-type).

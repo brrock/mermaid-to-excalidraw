@@ -1,4 +1,4 @@
-import { Position } from "./interfaces.js";
+import { Position } from "./interfaces";
 
 // Convert mermaid entity codes to text e.g. "#9829;" to "♥"
 export const entityCodesToText = (input: string): string => {

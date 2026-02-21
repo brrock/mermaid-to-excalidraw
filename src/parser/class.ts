@@ -1,6 +1,6 @@
-import { nanoid } from "nanoid";
+import { generateId } from "../types";
 
-import { computeEdgePositions, getTransformAttr } from "../utils.js";
+import { computeEdgePositions, getTransformAttr } from "../utils";
 import {
   Arrow,
   Container,
@@ -11,16 +11,16 @@ import {
   createContainerSkeletonFromSVG,
   createLineSkeletonFromSVG,
   createTextSkeleton,
-} from "../elementSkeleton.js";
+} from "../elementSkeleton";
 
-import type { Diagram } from "mermaid/dist/Diagram.js";
+import type Diagram from "mermaid/dist/Diagram";
 import type {
   ClassNode,
   ClassNote,
   ClassRelation,
   NamespaceNode,
-} from "mermaid/dist/diagrams/class/classTypes.js";
-import type { ExcalidrawLinearElement } from "@excalidraw/excalidraw/types/element/types.js";
+} from "mermaid/dist/diagrams/class/classTypes";
+import type { StrokeStyle, Arrowhead } from "../types/excalidraw";
 
 // Taken from mermaidParser.relationType
 const RELATION_TYPE = {
@@ -52,8 +52,8 @@ export interface Class {
   namespaces: NamespaceNode[];
 }
 
-const getStrokeStyle = (type: number) => {
-  let lineType: ExcalidrawLinearElement["strokeStyle"];
+const getStrokeStyle = (type: number): StrokeStyle => {
+  let lineType: StrokeStyle;
   switch (type) {
     case LINE_TYPE.LINE:
       lineType = "solid";
@@ -67,8 +67,8 @@ const getStrokeStyle = (type: number) => {
   return lineType;
 };
 
-const getArrowhead = (type: RELATION_TYPE_VALUES) => {
-  let arrowhead: ExcalidrawLinearElement["startArrowhead"];
+const getArrowhead = (type: RELATION_TYPE_VALUES): Arrowhead | null => {
+  let arrowhead: Arrowhead | null;
   switch (type) {
     case RELATION_TYPE.AGGREGATION:
       arrowhead = "diamond_outline";
@@ -102,7 +102,7 @@ const parseClasses = (
 
   Object.values(classes).forEach((classNode) => {
     const { domId, id: classId } = classNode;
-    const groupId = nanoid();
+    const groupId = generateId();
     const domNode = containerEl.querySelector(`[data-id=${classId}]`);
     if (!domNode) {
       throw Error(`DOM Node with id ${domId} not found`);
@@ -136,7 +136,7 @@ const parseClasses = (
         endY,
         {
           groupId,
-          id: nanoid(),
+          id: generateId(),
         }
       );
       line.startX += transformX;
@@ -159,7 +159,7 @@ const parseClasses = (
         return;
       }
 
-      const id = nanoid();
+      const id = generateId();
       const { transformX: textTransformX, transformY: textTransformY } =
         getTransformAttr(node);
       const boundingBox = (node as SVGForeignObjectElement).getBBox();
@@ -247,8 +247,8 @@ const parseRelations = (
     const node2 = classNodes.find((node) => node.id === id2)!;
 
     const strokeStyle = getStrokeStyle(relation.lineType);
-    const startArrowhead = getArrowhead(relation.type1);
-    const endArrowhead = getArrowhead(relation.type2);
+    const startArrowhead = getArrowhead(relation.type1 as RELATION_TYPE_VALUES);
+    const endArrowhead = getArrowhead(relation.type2 as RELATION_TYPE_VALUES);
 
     const edgePositionData = computeEdgePositions(
       edges[index] as SVGPathElement

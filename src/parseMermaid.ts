@@ -1,10 +1,10 @@
 import mermaid, { MermaidConfig } from "mermaid";
-import { GraphImage } from "./interfaces.js";
-import { MERMAID_CONFIG } from "./constants.js";
-import { encodeEntities } from "./utils.js";
-import { Flowchart, parseMermaidFlowChartDiagram } from "./parser/flowchart.js";
-import { Sequence, parseMermaidSequenceDiagram } from "./parser/sequence.js";
-import { Class, parseMermaidClassDiagram } from "./parser/class.js";
+import { GraphImage } from "./interfaces";
+import { MERMAID_CONFIG } from "./constants";
+import { encodeEntities } from "./utils";
+import { Flowchart, parseMermaidFlowChartDiagram } from "./parser/flowchart";
+import { Sequence, parseMermaidSequenceDiagram } from "./parser/sequence";
+import { Class, parseMermaidClassDiagram } from "./parser/class";
 
 // Fallback to Svg
 const convertSvgToGraphImage = (svgContainer: HTMLDivElement) => {

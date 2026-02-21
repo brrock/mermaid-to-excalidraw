@@ -1,16 +1,17 @@
-import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/types/data/transform.js";
-import { nanoid } from "nanoid";
+import {
+  ExcalidrawElementSkeleton,
+  ExcalidrawElement,
+} from "../../types/excalidraw";
+import { generateId } from "../../types";
 
-import { GraphConverter } from "../GraphConverter.js";
-import { Sequence } from "../../parser/sequence.js";
+import { GraphConverter } from "../GraphConverter";
+import { Sequence } from "../../parser/sequence";
 import {
   transformToExcalidrawLineSkeleton,
   transformToExcalidrawTextSkeleton,
   transformToExcalidrawContainerSkeleton,
   transformToExcalidrawArrowSkeleton,
-} from "../transformToExcalidrawSkeleton.js";
-
-import type { ExcalidrawElement } from "../../types.js";
+} from "../transformToExcalidrawSkeleton";
 
 export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
   converter: (chart: Sequence) => {
@@ -120,7 +121,7 @@ export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
         const groupRectY = minY - PADDING;
         const groupRectWidth = maxX - minX + PADDING * 2;
         const groupRectHeight = maxY - minY + PADDING * 2;
-        const groupRectId = nanoid();
+        const groupRectId = generateId();
         const groupRect = transformToExcalidrawContainerSkeleton({
           type: "rectangle",
           x: groupRectX,
@@ -131,9 +132,9 @@ export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
           id: groupRectId,
         });
         elements.unshift(groupRect);
-        const frameId = nanoid();
+        const frameId = generateId();
 
-        const frameChildren: ExcalidrawElement["id"][] = [groupRectId];
+        const frameChildren: string[] = [groupRectId];
 
         elements.forEach((ele) => {
           if (ele.type === "frame") {
@@ -153,7 +154,7 @@ export const SequenceToExcalidrawSkeletonConvertor = new GraphConverter({
             ele.y >= minY &&
             ele.y + ele.height <= maxY
           ) {
-            const elementId = ele.id || nanoid();
+            const elementId = ele.id || generateId();
             if (!ele.id) {
               Object.assign(ele, { id: elementId });
             }

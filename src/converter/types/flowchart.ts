@@ -1,14 +1,14 @@
-import { GraphConverter } from "../GraphConverter.js";
-import { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/types/data/transform.js";
+import { GraphConverter } from "../GraphConverter";
+import { ExcalidrawElementSkeleton } from "../../types/excalidraw";
 
 import {
   getText,
   computeExcalidrawVertexStyle,
   computeExcalidrawVertexLabelStyle,
   computeExcalidrawArrowType,
-} from "../helpers.js";
-import { VERTEX_TYPE } from "../../interfaces.js";
-import { Flowchart } from "../../parser/flowchart.js";
+} from "../helpers";
+import { VERTEX_TYPE } from "../../interfaces";
+import { Flowchart } from "../../parser/flowchart";
 
 const computeGroupIds = (
   graph: Flowchart

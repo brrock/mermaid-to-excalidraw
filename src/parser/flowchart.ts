@@ -2,17 +2,17 @@ import {
   computeEdgePositions,
   entityCodesToText,
   getTransformAttr,
-} from "../utils.js";
+} from "../utils";
 import {
   CONTAINER_STYLE_PROPERTY,
   LABEL_STYLE_PROPERTY,
   Position,
   SubGraph,
   Vertex,
-} from "../interfaces.js";
+} from "../interfaces";
 
-import type { Diagram } from "mermaid/dist/Diagram.js";
-import { DiagramStyleClassDef } from "mermaid/dist/diagram-api/types.js";
+import type Diagram from "mermaid/dist/Diagram";
+import type { DiagramStyleClassDef } from "mermaid/dist/diagram-api/types";
 
 export interface Flowchart {
   type: "flowchart";

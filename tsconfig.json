@@ -1,8 +1,16 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./src" },
-    { "path": "./playground" },
-    { "path": "./tests" }
-  ]
+  "compilerOptions": {
+    "target": "ES2021",
+    "strict": true,
+    "module": "ESNext",
+    "declaration": true,
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "bundler",
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "tests"]
 }

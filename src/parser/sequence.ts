@@ -1,5 +1,5 @@
-import { SVG_TO_SHAPE_MAPPER } from "../constants.js";
-import { nanoid } from "nanoid";
+import { SVG_TO_SHAPE_MAPPER } from "../constants";
+import { generateId } from "../types";
 import {
   Arrow,
   Container,
@@ -10,10 +10,10 @@ import {
   createContainerSkeletonFromSVG,
   createLineSkeletonFromSVG,
   createTextSkeletonFromSVG,
-} from "../elementSkeleton.js";
+} from "../elementSkeleton";
 
-import type { Diagram } from "mermaid/dist/Diagram.js";
-import type { StrokeStyle } from "@excalidraw/excalidraw/types/element/types.js";
+import type Diagram from "mermaid/dist/Diagram";
+import type { StrokeStyle } from "../types/excalidraw";
 
 type ARROW_KEYS = keyof typeof SEQUENCE_ARROW_TYPES;
 
@@ -153,7 +153,7 @@ const createActorSymbol = (
   if (!rootNode) {
     throw "root node not found";
   }
-  const groupId = nanoid();
+  const groupId = generateId();
   const children = Array.from(rootNode.children);
   const nodeElements: Node[] = [];
   children.forEach((child, index) => {
